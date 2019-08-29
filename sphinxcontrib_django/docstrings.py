@@ -197,11 +197,11 @@ def _get_field_type(field):
     if isinstance(field, models.ForeignKey):
         if django.VERSION >= (2, 0):
             to = field.remote_field.model
-            if isinstance(to, str):
+            if isinstance(to, str) or isinstance(to, unicode):
                 to = _resolve_model(field, to)
         else:
             to = field.rel.to
-            if isinstance(to, str):
+            if isinstance(to, str) or isinstance(to, unicode):
                 to = _resolve_model(field, to)
 
         return u":type %s: %s to :class:`~%s.%s`" % (
@@ -263,7 +263,7 @@ def _improve_attribute_docs(obj, name, lines):
     elif isinstance(obj, related_descriptors.ForwardManyToOneDescriptor):
         # Display a reasonable output for forward descriptors.
         related_model = obj.field.remote_field.model
-        if isinstance(related_model, str):
+        if isinstance(related_model, str) or isinstance(related_model, unicode):
             cls_path = related_model
         else:
             cls_path = "{}.{}".format(related_model.__module__, related_model.__name__)
@@ -276,7 +276,7 @@ def _improve_attribute_docs(obj, name, lines):
         )
     elif isinstance(obj, related_descriptors.ReverseOneToOneDescriptor):
         related_model = obj.related.related_model
-        if isinstance(related_model, str):
+        if isinstance(related_model, str) or isinstance(related_model, unicode):
             cls_path = related_model
         else:
             cls_path = "{}.{}".format(related_model.__module__, related_model.__name__)
@@ -289,7 +289,7 @@ def _improve_attribute_docs(obj, name, lines):
         )
     elif isinstance(obj, related_descriptors.ReverseManyToOneDescriptor):
         related_model = obj.rel.related_model
-        if isinstance(related_model, str):
+        if isinstance(related_model, str) or isinstance(related_model, unicode):
             cls_path = related_model
         else:
             cls_path = "{}.{}".format(related_model.__module__, related_model.__name__)
